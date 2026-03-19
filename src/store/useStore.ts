@@ -3,13 +3,15 @@ import { persist } from 'zustand/middleware';
 import type { User, Expense, Ledger } from '../types';
 
 interface AppState {
+  theme: 'light' | 'dark';
   ledgers: Ledger[];
   activeLedgerId: string | null;
   users: User[];
   expenses: Expense[];
   
   // Actions
-  addLedger: (name: string) => void;
+  toggleTheme: () => void;
+  addLedger: (name: string, memberNames?: string[]) => void;
   setActiveLedger: (id: string | null) => void;
   removeLedger: (id: string) => void;
   
@@ -23,36 +25,48 @@ interface AppState {
 export const useStore = create<AppState>()(
   persist(
     (set) => ({
+      theme: 'light',
       ledgers: [],
       activeLedgerId: null,
       users: [],
       expenses: [],
       
-      addLedger: (name) => set((state) => {
-        const newLedger = { id: crypto.randomUUID(), name, createdAt: Date.now() };
+      toggleTheme: () => set((state) => ({ theme: state.theme === 'light' ? 'dark' : 'light' })),
+      
+      addLedger: (name, memberNames) => set((state) => {
+        const newLedgerId = crypto.randomUUID();
+        const newLedger = { id: newLedgerId, name, createdAt: Date.now() };
+        
+        let newUsers = state.users;
+        if (memberNames && memberNames.length > 0) {
+          const usersToAdd = memberNames.map(mName => ({ id: crypto.randomUUID(), ledgerId: newLedgerId, name: mName }));
+          newUsers = [...state.users, ...usersToAdd];
+        }
+
         return {
           ledgers: [...state.ledgers, newLedger],
-          activeLedgerId: newLedger.id // Optionally switch to it immediately
+          users: newUsers,
+          activeLedgerId: newLedger.id // Switch to it immediately
         };
       }),
       
-      setActiveLedger: (id) => set({ activeLedgerId: id }),
+      setActiveLedger: (id: string | null) => set({ activeLedgerId: id }),
       
-      removeLedger: (id) => set((state) => ({
+      removeLedger: (id: string) => set((state) => ({
         ledgers: state.ledgers.filter(l => l.id !== id),
         activeLedgerId: state.activeLedgerId === id ? null : state.activeLedgerId,
         users: state.users.filter(u => u.ledgerId !== id),
         expenses: state.expenses.filter(e => e.ledgerId !== id),
       })),
       
-      addUser: (name) => set((state) => {
+      addUser: (name: string) => set((state) => {
         if (!state.activeLedgerId) return state;
         return {
           users: [...state.users, { id: crypto.randomUUID(), ledgerId: state.activeLedgerId, name }]
         };
       }),
       
-      removeUser: (id, cascadeRemoveExpenses = true) => set((state) => {
+      removeUser: (id: string, cascadeRemoveExpenses = true) => set((state) => {
         let newExpenses = state.expenses;
         if (cascadeRemoveExpenses) {
           newExpenses = newExpenses.filter(e => 

@@ -9,35 +9,53 @@ export function MembersTab() {
   const addUser = useStore(state => state.addUser);
   const removeUser = useStore(state => state.removeUser);
   const [newName, setNewName] = useState('');
+  const [errorName, setErrorName] = useState('');
 
   const handleAdd = () => {
     const trimmed = newName.trim();
-    if (trimmed) {
-      addUser(trimmed);
-      setNewName('');
+    if (!trimmed) {
+      setErrorName('請輸入成員名稱');
+      return;
     }
+    if (trimmed.length > 15) {
+      setErrorName('名稱不能超過 15 個字');
+      return;
+    }
+    if (users.some(u => u.name === trimmed)) {
+      setErrorName('此成員名稱已存在');
+      return;
+    }
+
+    addUser(trimmed);
+    setNewName('');
+    setErrorName('');
   };
 
   return (
     <div className="space-y-6">
       
       {/* Add Member Card */}
-      <div className="bg-apple-card dark:bg-apple-card-dark rounded-3xl p-5 shadow-sm border border-apple-border dark:border-apple-border-dark flex gap-3 items-center">
-        <input
-          type="text"
-          value={newName}
-          onChange={(e) => setNewName(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
-          placeholder="輸入成員名稱..."
-          className="flex-1 bg-apple-bg dark:bg-black/50 border border-apple-border dark:border-apple-border-dark rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-apple-blue transition-all"
-        />
-        <button
-          onClick={handleAdd}
-          disabled={!newName.trim()}
-          className="bg-apple-blue text-white p-3 rounded-xl disabled:opacity-50 transition-opacity active:scale-95"
-        >
-          <Plus size={24} />
-        </button>
+      <div className="bg-apple-card/40 dark:bg-apple-card-dark/40 backdrop-blur-md rounded-[2rem] p-6 shadow-sm border border-white/50 dark:border-white/10 flex flex-col gap-3">
+        <div className="flex gap-3 items-center">
+            <input
+              type="text"
+              value={newName}
+              onChange={(e) => {
+                setNewName(e.target.value);
+                if (errorName) setErrorName('');
+              }}
+              onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+              placeholder="輸入成員名稱..."
+              className={`flex-1 bg-apple-bg dark:bg-black/50 border ${errorName ? 'border-red-500' : 'border-apple-border/50 dark:border-apple-border-dark'} rounded-[1.5rem] px-5 py-4 outline-none focus:ring-2 focus:ring-apple-blue-heavy transition-all`}
+            />
+            <button
+              onClick={handleAdd}
+              className="bg-apple-blue-heavy text-white w-14 h-14 rounded-full flex items-center justify-center transition-transform active:scale-95 shadow-soft-hover"
+            >
+              <Plus size={24} />
+            </button>
+        </div>
+        {errorName && <p className="text-sm text-red-500 px-1">{errorName}</p>}
       </div>
 
       {/* Members List */}
@@ -48,12 +66,12 @@ export function MembersTab() {
           </div>
         ) : (
           users.map(user => (
-            <div key={user.id} className="bg-apple-card dark:bg-apple-card-dark rounded-2xl p-4 shadow-sm border border-apple-border dark:border-apple-border-dark flex items-center justify-between group">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-apple-bg dark:bg-black/50 flex items-center justify-center text-apple-text dark:text-apple-text-dark">
-                  <UserIcon size={20} />
+            <div key={user.id} className="bg-apple-card/60 dark:bg-apple-card-dark/60 backdrop-blur-2xl rounded-[2rem] p-5 shadow-soft dark:shadow-soft-dark border border-white/50 dark:border-white/10 flex items-center justify-between group hover:shadow-soft-hover transition-all">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-[1.25rem] bg-pastel-lavender dark:bg-pastel-lavender/10 flex items-center justify-center text-apple-blue-heavy shadow-inner">
+                  <UserIcon size={22} />
                 </div>
-                <span className="font-medium text-lg">{user.name}</span>
+                <span className="font-semibold text-lg">{user.name}</span>
               </div>
               <button
                 onClick={() => {

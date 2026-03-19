@@ -1,21 +1,39 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&family=Noto+Sans+TC:wght@100..900&family=Outfit:wght@100..900&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap');
 
 @theme {
-  --color-apple-blue: #007AFF;
-  --color-apple-bg: #F5F5F7;
-  --color-apple-bg-dark: #000000;
-  --color-apple-card: #FFFFFF;
-  --color-apple-card-dark: #1C1C1E;
-  --color-apple-text: #1D1D1F;
-  --color-apple-text-dark: #F5F5F7;
-  --color-apple-border: #D2D2D7;
-  --color-apple-border-dark: #38383A;
+  /* Retain some original mappings but shift their hues to pastel cream */
+  --color-apple-blue: #A9D5C5; /* Soft Mint Green */
+  --color-apple-blue-heavy: #7FB8A1;
   
-  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --color-pastel-mint: #E6F3EC;
+  --color-pastel-peach: #FFF0E5;
+  --color-pastel-butter: #FFF9D1;
+  --color-pastel-lavender: #F2E8FB;
+
+  --color-apple-bg: #FCFBF9; /* Soft Cream */
+  --color-apple-bg-dark: #1A1A19; /* Warm Dark */
+  --color-apple-card: #FFFFFF;
+  --color-apple-card-dark: #242423;
+  --color-apple-text: #2B2A29;
+  --color-apple-text-dark: #EAE9E5;
+  --color-apple-border: #EBEAE5;
+  --color-apple-border-dark: #3A3938;
+  
+  --font-sans: "Noto Sans TC", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-rounded: "Zen Maru Gothic", "Varela Round", "Noto Sans TC", sans-serif;
+  --font-display: "Outfit", "Noto Sans TC", sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
+
+  /* Custom Drop Shadows for Floating Elements */
+  --shadow-soft: 0 16px 40px -12px rgba(0, 0, 0, 0.06);
+  --shadow-soft-hover: 0 20px 48px -12px rgba(0, 0, 0, 0.1);
+  --shadow-soft-dark: 0 16px 40px -12px rgba(0, 0, 0, 0.3);
 }
 
 @layer base {
   body {
-    @apply bg-apple-bg text-apple-text dark:bg-apple-bg-dark dark:text-apple-text-dark font-sans antialiased selection:bg-apple-blue selection:text-white transition-colors duration-300;
+    @apply bg-apple-bg text-apple-text dark:bg-apple-bg-dark dark:text-apple-text-dark font-sans antialiased selection:bg-pastel-lavender selection:text-apple-text transition-colors duration-500 relative min-h-[100dvh];
   }
 }

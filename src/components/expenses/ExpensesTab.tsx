@@ -20,10 +20,10 @@ export function ExpensesTab() {
       ) : (
         <div className="space-y-3">
           {expenses.map(exp => (
-            <div key={exp.id} className="bg-apple-card dark:bg-apple-card-dark rounded-2xl p-4 shadow-sm border border-apple-border dark:border-apple-border-dark flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-apple-blue/10 flex items-center justify-center text-apple-blue shrink-0">
-                  <ReceiptText size={20} />
+            <div key={exp.id} className="bg-apple-card/60 dark:bg-apple-card-dark/60 backdrop-blur-2xl rounded-[2rem] p-5 shadow-soft dark:shadow-soft-dark border border-white/50 dark:border-white/10 flex items-center justify-between hover:shadow-soft-hover transition-all">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 rounded-[1.25rem] bg-pastel-mint dark:bg-pastel-mint/10 flex items-center justify-center text-apple-blue-heavy shrink-0 shadow-inner">
+                  <ReceiptText size={22} />
                 </div>
                 <div>
                   <h3 className="font-semibold line-clamp-1 break-all">{exp.title}</h3>
@@ -34,8 +34,9 @@ export function ExpensesTab() {
               </div>
               <div className="flex items-center gap-3 shrink-0">
                 <div className="text-right">
-                  <div className="font-semibold">
-                    {exp.currency === 'JPY' ? '¥' : 'NT$'} {exp.amount.toLocaleString()}
+                  <div className="font-mono font-bold text-lg text-apple-blue-heavy">
+                    <span className="text-xs mr-1 opacity-70 font-sans tracking-wide">{exp.currency === 'JPY' ? '¥' : 'NT$'}</span>
+                    {exp.amount.toLocaleString()}
                   </div>
                   {exp.currency === 'JPY' && (
                     <div className="text-[10px] text-gray-500">

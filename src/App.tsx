@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AppLayout } from './components/layout/AppLayout';
 import type { TabType } from './components/layout/BottomNav';
 import { DashboardTab } from './components/dashboard/DashboardTab';
@@ -11,8 +11,17 @@ import { useStore } from './store/useStore';
 
 function App() {
   const activeLedgerId = useStore(state => state.activeLedgerId);
+  const theme = useStore(state => state.theme);
   const [currentTab, setCurrentTab] = useState<TabType>('dashboard');
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
 
   // Router: If no explicit ledger is selected, view all ledgers
   if (!activeLedgerId) {
@@ -25,7 +34,7 @@ function App() {
       onChangeTab={setCurrentTab}
       onAddClick={() => setIsModalOpen(true)}
     >
-      <h1 className="text-3xl font-bold mb-6 tracking-tight">
+      <h1 className="text-4xl font-display font-bold mb-6 tracking-tight text-apple-text dark:text-apple-text-dark">
         {currentTab === 'dashboard' && '總覽'}
         {currentTab === 'expenses' && '帳目'}
         {currentTab === 'members' && '成員'}

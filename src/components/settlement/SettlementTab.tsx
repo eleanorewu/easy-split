@@ -40,8 +40,8 @@ export function SettlementTab() {
   return (
     <div className="space-y-6 pb-24">
       {/* Currency Toggle */}
-      <div className="bg-apple-card dark:bg-apple-card-dark rounded-3xl p-2 shadow-sm border border-apple-border dark:border-apple-border-dark flex items-center justify-between">
-        <div className="px-4 py-2 flex items-center gap-2 text-sm font-medium text-gray-500">
+      <div className="bg-apple-card/40 dark:bg-apple-card-dark/40 backdrop-blur-md rounded-[2rem] p-2 shadow-sm border border-white/50 dark:border-white/10 flex items-center justify-between">
+        <div className="px-5 py-2 flex items-center gap-2 text-sm font-medium text-gray-500 font-rounded">
           顯示幣別
           {isFetching && currencyDisplay === 'JPY' && <Loader2 size={14} className="animate-spin text-apple-blue" />}
         </div>
@@ -59,7 +59,7 @@ export function SettlementTab() {
 
       {/* Transaction List */}
       {transactions.length === 0 ? (
-        <div className="text-center py-10 text-gray-500 bg-apple-card dark:bg-apple-card-dark rounded-3xl p-6 border border-apple-border dark:border-apple-border-dark shadow-sm">
+        <div className="text-center py-10 text-gray-500 bg-apple-card/60 dark:bg-apple-card-dark/60 backdrop-blur-2xl rounded-[2rem] p-6 border border-white/50 dark:border-white/10 shadow-soft">
           🎉 大家已經互不相欠囉！
         </div>
       ) : (
@@ -70,22 +70,23 @@ export function SettlementTab() {
               : Math.round(t.amountTWD / latestRate);
 
             return (
-              <div key={idx} className="bg-apple-card dark:bg-apple-card-dark rounded-2xl p-5 shadow-sm border border-apple-border dark:border-apple-border-dark flex items-center justify-between">
+              <div key={idx} className="bg-apple-card/60 dark:bg-apple-card-dark/60 backdrop-blur-2xl rounded-[2rem] p-6 shadow-soft dark:shadow-soft-dark border border-white/50 dark:border-white/10 flex items-center justify-between hover:shadow-soft-hover transition-all">
                 <div className="flex flex-col items-center flex-1">
                   <span className="font-semibold text-lg">{getUserName(t.from)}</span>
-                  <span className="text-xs text-red-500 font-medium">應付</span>
+                  <span className="text-xs text-apple-blue-heavy font-medium font-rounded">應付</span>
                 </div>
                 
                 <div className="flex flex-col items-center px-4 shrink-0">
-                  <span className="text-lg font-bold">
-                    {currencyDisplay === 'JPY' ? '¥' : 'NT$'} {amount.toLocaleString()}
-                  </span>
-                  <ArrowRight size={20} className="text-gray-300 dark:text-gray-600 my-1" />
+                  <div className="flex items-center gap-1 font-mono font-bold text-xl text-apple-text dark:text-apple-text-dark">
+                    <span className="text-sm opacity-50 font-sans tracking-wide">{currencyDisplay === 'JPY' ? '¥' : 'NT$'}</span>
+                    {amount.toLocaleString()}
+                  </div>
+                  <ArrowRight size={20} className="text-gray-300 dark:text-gray-600 my-2" />
                 </div>
 
                 <div className="flex flex-col items-center flex-1">
                   <span className="font-semibold text-lg">{getUserName(t.to)}</span>
-                  <span className="text-xs text-green-500 font-medium">應收</span>
+                  <span className="text-xs text-pastel-mint-heavy font-medium font-rounded" style={{color: '#7FB8A1'}}>應收</span>
                 </div>
               </div>
             );

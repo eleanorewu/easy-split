@@ -1,25 +1,17 @@
 import { useState } from 'react';
 import { Plus, BookText, Trash2, ArrowRight } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { CreateLedgerModal } from './CreateLedgerModal';
+import { ThemeToggle } from '../ui/ThemeToggle';
 
 export function LedgerListScreen() {
   const ledgers = useStore(state => state.ledgers);
-  const addLedger = useStore(state => state.addLedger);
   const removeLedger = useStore(state => state.removeLedger);
   const setActiveLedger = useStore(state => state.setActiveLedger);
   const users = useStore(state => state.users);
   const expenses = useStore(state => state.expenses);
 
   const [isAdding, setIsAdding] = useState(false);
-  const [newLedgerName, setNewLedgerName] = useState('');
-
-  const handleCreate = () => {
-    if (newLedgerName.trim()) {
-      addLedger(newLedgerName.trim());
-      setNewLedgerName('');
-      setIsAdding(false);
-    }
-  };
 
   const getLedgerStats = (id: string) => {
     const lUsers = users.filter(u => u.ledgerId === id);
@@ -29,9 +21,12 @@ export function LedgerListScreen() {
   };
 
   return (
-    <div className="min-h-screen bg-apple-card/50 dark:bg-apple-bg-dark text-apple-text dark:text-apple-text-dark font-sans selection:bg-apple-blue selection:text-white">
-      <div className="max-w-md mx-auto min-h-screen bg-apple-bg dark:bg-apple-bg-dark pt-[env(safe-area-inset-top)] pb-[calc(env(safe-area-inset-bottom)+2rem)] px-5 py-8 shadow-2xl shadow-black/5">
-        <h1 className="text-4xl font-bold mb-8 tracking-tight">我的帳本</h1>
+    <div className="min-h-screen bg-apple-bg dark:bg-apple-bg-dark text-apple-text dark:text-apple-text-dark font-sans relative transition-colors duration-500">
+      <div className="max-w-md mx-auto min-h-screen bg-apple-bg dark:bg-apple-bg-dark pt-[env(safe-area-inset-top)] pb-[calc(env(safe-area-inset-bottom)+2rem)] px-5 py-8 shadow-soft-dark dark:shadow-black/20 transition-colors duration-500">
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-4xl font-display font-bold tracking-tight text-apple-text dark:text-apple-text-dark">我的帳本</h1>
+          <ThemeToggle />
+        </div>
 
         <div className="space-y-4">
           {ledgers.map(ledger => {
@@ -41,11 +36,11 @@ export function LedgerListScreen() {
               <div 
                 key={ledger.id} 
                 onClick={() => setActiveLedger(ledger.id)}
-                className="bg-apple-card dark:bg-apple-card-dark rounded-3xl p-5 shadow-sm border border-apple-border dark:border-apple-border-dark cursor-pointer active:scale-95 transition-transform group relative overflow-hidden"
+                className="bg-apple-card/60 dark:bg-apple-card-dark/60 backdrop-blur-2xl rounded-[2rem] p-6 shadow-soft dark:shadow-soft-dark border border-white/50 dark:border-white/10 cursor-pointer hover:shadow-soft-hover active:scale-95 transition-all group relative overflow-hidden"
               >
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 bg-apple-blue/10 rounded-2xl flex items-center justify-center text-apple-blue">
+                    <div className="w-14 h-14 bg-pastel-mint dark:bg-pastel-mint/10 rounded-[1.25rem] flex items-center justify-center text-apple-blue-heavy shadow-inner">
                       <BookText size={24} />
                     </div>
                     <div>
@@ -67,11 +62,11 @@ export function LedgerListScreen() {
                 </div>
 
                 <div className="flex justify-between items-end mt-4">
-                  <div className="text-sm font-medium text-gray-500">
-                    {stats.userCount} 位成員 · {stats.expenseCount} 筆花費
+                  <div className="text-sm font-medium text-gray-500 font-rounded">
+                    {stats.userCount} <span className="text-xs">成員</span> · {stats.expenseCount} <span className="text-xs">帳目</span>
                   </div>
-                  <div className="flex items-center text-apple-blue font-semibold">
-                    NT$ {stats.total.toLocaleString()}
+                  <div className="flex items-center text-apple-blue-heavy font-mono font-bold text-lg">
+                    <span className="text-[11px] mr-1 opacity-70 font-sans tracking-wide">NT$</span> {stats.total.toLocaleString()}
                     <ArrowRight size={18} className="ml-1 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
                   </div>
                 </div>
@@ -79,36 +74,16 @@ export function LedgerListScreen() {
             );
           })}
 
-          {isAdding ? (
-            <div className="bg-apple-card dark:bg-apple-card-dark rounded-3xl p-5 shadow-sm border border-apple-border dark:border-apple-border-dark flex gap-3 items-center">
-              <input
-                autoFocus
-                type="text"
-                value={newLedgerName}
-                onChange={e => setNewLedgerName(e.target.value)}
-                onKeyDown={e => e.key === 'Enter' && handleCreate()}
-                placeholder="輸入帳本名稱 (如: 沖繩五日遊)"
-                className="flex-1 bg-apple-bg dark:bg-black/50 border border-apple-border dark:border-apple-border-dark rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-apple-blue transition-all"
-              />
-              <button 
-                onClick={handleCreate}
-                disabled={!newLedgerName.trim()}
-                className="bg-apple-blue text-white p-3 rounded-xl disabled:opacity-50 active:scale-95 transition-all"
-              >
-                <Plus size={24} />
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={() => setIsAdding(true)}
-              className="w-full bg-apple-card dark:bg-apple-card-dark rounded-3xl p-5 shadow-sm border border-dashed border-gray-300 dark:border-gray-700 flex flex-col items-center justify-center gap-2 text-gray-500 hover:text-apple-blue hover:border-apple-blue/50 hover:bg-apple-blue/5 active:scale-95 transition-all"
-            >
-              <Plus size={28} />
-              <span className="font-medium">建立新帳本</span>
-            </button>
-          )}
+          <button
+            onClick={() => setIsAdding(true)}
+            className="w-full bg-apple-card/40 dark:bg-apple-card-dark/40 backdrop-blur-md rounded-[2rem] p-6 shadow-sm border-[2px] border-dashed border-apple-border dark:border-apple-border-dark flex flex-col items-center justify-center gap-3 text-gray-400 hover:text-apple-blue-heavy hover:border-apple-blue-heavy/50 hover:bg-white/50 dark:hover:bg-black/20 active:scale-95 transition-all"
+          >
+            <Plus size={28} />
+            <span className="font-medium">建立新帳本</span>
+          </button>
         </div>
       </div>
+      {isAdding && <CreateLedgerModal onClose={() => setIsAdding(false)} />}
     </div>
   );
 }
