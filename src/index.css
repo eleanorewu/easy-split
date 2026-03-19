@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@theme {
+  --color-apple-blue: #007AFF;
+  --color-apple-bg: #F5F5F7;
+  --color-apple-bg-dark: #000000;
+  --color-apple-card: #FFFFFF;
+  --color-apple-card-dark: #1C1C1E;
+  --color-apple-text: #1D1D1F;
+  --color-apple-text-dark: #F5F5F7;
+  --color-apple-border: #D2D2D7;
+  --color-apple-border-dark: #38383A;
+  
+  --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-apple-bg text-apple-text dark:bg-apple-bg-dark dark:text-apple-text-dark font-sans antialiased selection:bg-apple-blue selection:text-white transition-colors duration-300;
+  }
+}
