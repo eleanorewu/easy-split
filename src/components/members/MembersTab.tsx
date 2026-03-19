@@ -45,18 +45,18 @@ export function MembersTab() {
     <div className="space-y-6">
       
       {/* Add Member Card */}
-      <div className="bg-apple-card/40 dark:bg-apple-card-dark/40 backdrop-blur-md rounded-[2rem] p-6 shadow-sm border border-white/50 dark:border-white/10 flex flex-col gap-3">
+      <div className="apple-card p-6 flex flex-col gap-3">
         <div className="flex gap-3 items-center">
             <button
               onClick={() => setIsPickingNewUserAvatar(true)}
-              className="w-14 h-14 rounded-[1.5rem] bg-apple-bg dark:bg-black/50 border border-apple-border/50 dark:border-apple-border-dark flex items-center justify-center text-apple-blue-heavy shadow-inner relative outline-none flex-shrink-0"
+              className="w-14 h-14 rounded-apple-xl bg-apple-bg dark:bg-black/50 border border-apple-border/50 dark:border-apple-border-dark flex items-center justify-center text-apple-blue-heavy shadow-inner relative outline-none flex-shrink-0"
               aria-label="設定成員頭像（選填）"
               title="設定頭像（選填）"
             >
               <Avatar
                 avatar={newUserAvatar}
                 fallback="user"
-                className="w-14 h-14 rounded-[1.5rem] flex items-center justify-center"
+                className="w-14 h-14 rounded-apple-xl flex items-center justify-center"
               />
               <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white/80 dark:bg-black/50 border border-white/60 dark:border-white/10 flex items-center justify-center text-gray-600 dark:text-gray-300">
                 <Pencil size={12} />
@@ -71,11 +71,11 @@ export function MembersTab() {
               }}
               onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
               placeholder="輸入成員名稱..."
-              className={`flex-1 bg-apple-bg dark:bg-black/50 border ${errorName ? 'border-red-500' : 'border-apple-border/50 dark:border-apple-border-dark'} rounded-[1.5rem] px-5 py-4 outline-none focus:ring-2 focus:ring-apple-blue-heavy transition-all`}
+              className={errorName ? 'apple-input flex-1 border-red-500' : 'apple-input flex-1'}
             />
             <button
               onClick={handleAdd}
-              className="bg-apple-blue-heavy text-white w-14 h-14 rounded-full flex items-center justify-center transition-transform active:scale-95 shadow-soft-hover"
+              className="btn-primary btn-icon-circle shadow-soft-hover"
             >
               <Plus size={24} />
             </button>
@@ -91,18 +91,18 @@ export function MembersTab() {
           </div>
         ) : (
           users.map(user => (
-            <div key={user.id} className="bg-apple-card/60 dark:bg-apple-card-dark/60 backdrop-blur-2xl rounded-[2rem] p-5 shadow-soft dark:shadow-soft-dark border border-white/50 dark:border-white/10 flex items-center justify-between group hover:shadow-soft-hover transition-all">
+            <div key={user.id} className="apple-card apple-card-hover p-5 flex items-center justify-between group">
               <div className="flex items-center gap-4">
                 <button
                   onClick={() => setEditingUserId(user.id)}
-                  className="w-12 h-12 rounded-[1.25rem] bg-pastel-lavender dark:bg-pastel-lavender/10 flex items-center justify-center text-apple-blue-heavy shadow-inner relative outline-none"
+                  className="w-12 h-12 rounded-apple-xl bg-pastel-lavender dark:bg-pastel-lavender/10 flex items-center justify-center text-apple-blue-heavy shadow-inner relative outline-none"
                   aria-label="編輯成員頭像"
                   title="編輯頭像"
                 >
                   <Avatar
                     avatar={user.avatar}
                     fallback="user"
-                    className="w-12 h-12 rounded-[1.25rem] flex items-center justify-center"
+                    className="w-12 h-12 rounded-apple-xl flex items-center justify-center"
                   />
                   <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white/80 dark:bg-black/50 border border-white/60 dark:border-white/10 flex items-center justify-center text-gray-600 dark:text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">
                     <Pencil size={12} />
@@ -116,7 +116,7 @@ export function MembersTab() {
                     removeUser(user.id);
                   }
                 }}
-                className="text-red-500 opacity-80 hover:opacity-100 p-2 active:scale-95 transition-all outline-none"
+                className="btn-ghost text-red-500"
               >
                 <Trash2 size={20} />
               </button>

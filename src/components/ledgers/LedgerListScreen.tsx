@@ -32,7 +32,7 @@ export function LedgerListScreen({ onEnterLedger }: { onEnterLedger?: (tab: TabT
       <div className="max-w-md mx-auto min-h-screen bg-apple-bg dark:bg-apple-bg-dark pt-[env(safe-area-inset-top)] pb-[calc(env(safe-area-inset-bottom)+2rem)] px-5 py-8 shadow-soft-dark dark:shadow-black/20 relative flex flex-col transition-colors duration-500">
         
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-display font-bold tracking-tight text-apple-text dark:text-apple-text-dark">我的帳本</h1>
+          <h1 className="text-apple-text dark:text-apple-text-dark">我的帳本</h1>
           <ThemeToggle />
         </div>
 
@@ -54,7 +54,7 @@ export function LedgerListScreen({ onEnterLedger }: { onEnterLedger?: (tab: TabT
                     setActiveLedger(ledger.id);
                     onEnterLedger?.('dashboard');
                   }}
-                  className="bg-apple-card/60 dark:bg-apple-card-dark/60 backdrop-blur-2xl rounded-[2rem] p-6 shadow-soft dark:shadow-soft-dark border border-white/50 dark:border-white/10 cursor-pointer hover:shadow-soft-hover active:scale-[0.98] transition-all group relative overflow-hidden flex flex-col"
+                  className="apple-card apple-card-hover cursor-pointer active:scale-[0.98] group relative overflow-hidden flex flex-col p-6"
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-3">
@@ -63,21 +63,21 @@ export function LedgerListScreen({ onEnterLedger }: { onEnterLedger?: (tab: TabT
                           e.stopPropagation();
                           setEditingLedgerId(ledger.id);
                         }}
-                        className="w-14 h-14 bg-pastel-mint dark:bg-pastel-mint/10 rounded-[1.25rem] flex items-center justify-center text-apple-blue-heavy shadow-inner relative outline-none"
+                        className="w-14 h-14 bg-pastel-mint dark:bg-pastel-mint/10 rounded-apple-xl flex items-center justify-center text-apple-blue-heavy shadow-inner relative outline-none"
                         aria-label="編輯帳本頭像"
                         title="編輯頭像"
                       >
                         <Avatar
                           avatar={ledger.avatar}
                           fallback="book"
-                          className="w-14 h-14 rounded-[1.25rem] flex items-center justify-center"
+                          className="w-14 h-14 rounded-apple-xl flex items-center justify-center"
                         />
                         <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white/80 dark:bg-black/50 border border-white/60 dark:border-white/10 flex items-center justify-center text-gray-600 dark:text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">
                           <Pencil size={12} />
                         </span>
                       </button>
                       <div>
-                        <h2 className="text-xl font-bold">{ledger.name}</h2>
+                        <h2 className="text-xl">{ledger.name}</h2>
                         <p className="text-xs text-gray-500 mt-0.5">建立於 {dateStr}</p>
                       </div>
                     </div>
@@ -88,7 +88,7 @@ export function LedgerListScreen({ onEnterLedger }: { onEnterLedger?: (tab: TabT
                           removeLedger(ledger.id);
                         }
                       }}
-                      className="text-gray-300 hover:text-red-500 p-2 transition-colors z-10 relative"
+                      className="btn-ghost text-gray-300 hover:text-red-500 z-10 relative"
                     >
                       <Trash2 size={20} />
                     </button>
@@ -111,7 +111,7 @@ export function LedgerListScreen({ onEnterLedger }: { onEnterLedger?: (tab: TabT
                         setActiveLedger(ledger.id);
                         onEnterLedger?.('members');
                       }}
-                      className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-apple-bg/50 dark:bg-apple-bg-dark/50 text-apple-blue-heavy font-medium text-[13px] hover:opacity-80 transition-opacity"
+                      className="btn-secondary flex-1 py-2.5 rounded-xl text-[13px]"
                     >
                       <UserPlus size={16} /> 新增成員
                     </button>
@@ -121,7 +121,7 @@ export function LedgerListScreen({ onEnterLedger }: { onEnterLedger?: (tab: TabT
                         setActiveLedger(ledger.id);
                         onEnterLedger?.('settlement');
                       }}
-                      className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-apple-bg/50 dark:bg-apple-bg-dark/50 text-apple-text dark:text-apple-text-dark font-medium text-[13px] hover:opacity-80 transition-opacity"
+                      className="btn-secondary flex-1 py-2.5 rounded-xl text-[13px] text-apple-text dark:text-apple-text-dark"
                     >
                       <Calculator size={16} /> 快速結算
                     </button>
@@ -136,7 +136,7 @@ export function LedgerListScreen({ onEnterLedger }: { onEnterLedger?: (tab: TabT
         <div className="mt-8 pt-4">
           <button
             onClick={() => setIsAdding(true)}
-            className="w-full bg-apple-card/40 dark:bg-apple-card-dark/40 backdrop-blur-md rounded-[2rem] p-6 shadow-sm border-[2px] border-dashed border-apple-border dark:border-apple-border-dark flex flex-col items-center justify-center gap-3 text-gray-400 hover:text-apple-blue-heavy hover:border-apple-blue-heavy/50 hover:bg-white/50 dark:hover:bg-black/20 active:scale-95 transition-all outline-none"
+            className="btn-base w-full rounded-apple-2xl p-6 bg-apple-card/40 dark:bg-apple-card-dark/40 backdrop-blur-md shadow-sm border-[2px] border-dashed border-apple-border dark:border-apple-border-dark flex flex-col items-center justify-center gap-3 text-gray-400 hover:text-apple-blue-heavy hover:border-apple-blue-heavy/50 hover:bg-white/50 dark:hover:bg-black/20"
           >
             <Plus size={28} />
             <span className="font-medium text-lg">建立新帳本</span>

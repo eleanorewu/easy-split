@@ -71,10 +71,10 @@ export function CreateLedgerModal({ onClose }: CreateLedgerModalProps) {
       <div className="w-full max-w-md bg-apple-bg/90 dark:bg-apple-bg-dark/90 backdrop-blur-3xl rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-soft-dark border border-white/20 overflow-hidden flex flex-col max-h-[90vh]">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-apple-border/50 dark:border-apple-border-dark/50 bg-transparent z-10 sticky top-0">
-          <h2 className="text-2xl font-display font-bold tracking-tight">建立新帳本</h2>
+          <h2 className="text-2xl tracking-tight">建立新帳本</h2>
           <button 
             onClick={onClose}
-            className="p-2 rounded-full bg-apple-bg dark:bg-black/50 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+            className="btn-ghost bg-apple-bg dark:bg-black/50 rounded-full"
           >
             <X size={20} className="text-gray-500" />
           </button>
@@ -112,7 +112,7 @@ export function CreateLedgerModal({ onClose }: CreateLedgerModalProps) {
                 if (errorName) setErrorName('');
               }}
               placeholder="例如：沖繩五日遊"
-              className={`w-full bg-apple-card/60 dark:bg-apple-card-dark/60 border ${errorName ? 'border-red-500' : 'border-white/50 dark:border-white/10'} rounded-[1.5rem] px-5 py-4 outline-none focus:ring-2 focus:ring-apple-blue-heavy transition-all`}
+              className={errorName ? 'apple-input w-full border-red-500' : 'apple-input w-full'}
             />
             {errorName && <p className="text-sm text-red-500">{errorName}</p>}
           </div>
@@ -157,13 +157,13 @@ export function CreateLedgerModal({ onClose }: CreateLedgerModalProps) {
                      }
                    }}
                    placeholder="輸入成員名稱"
-                   className={`w-full bg-apple-card/60 dark:bg-apple-card-dark/60 border ${errorMember ? 'border-red-500' : 'border-white/50 dark:border-white/10'} rounded-[1.5rem] px-5 py-4 outline-none focus:ring-2 focus:ring-apple-blue-heavy transition-all`}
+                   className={errorMember ? 'apple-input w-full border-red-500' : 'apple-input w-full'}
                  />
                  {errorMember && <p className="text-sm text-red-500 pl-1">{errorMember}</p>}
                </div>
                <button
                  onClick={handleAddMember}
-                 className="bg-apple-blue text-white p-3 rounded-xl hover:bg-blue-600 transition-colors active:scale-95 flex-shrink-0"
+                 className="btn-primary w-14 h-14 rounded-apple-xl flex-shrink-0"
                >
                  <Plus size={24} />
                </button>
@@ -205,7 +205,7 @@ export function CreateLedgerModal({ onClose }: CreateLedgerModalProps) {
         <div className="p-6 border-t border-apple-border/50 dark:border-apple-border-dark/50 bg-transparent z-10">
           <button 
             onClick={handleSave}
-            className="w-full bg-apple-blue-heavy text-white font-rounded font-bold py-4 rounded-[1.5rem] hover:bg-apple-blue active:scale-95 transition-all shadow-soft-hover"
+            className="btn-primary w-full py-4 rounded-apple-xl shadow-soft-hover"
           >
             建立並開始記帳
           </button>

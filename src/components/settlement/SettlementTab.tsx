@@ -40,7 +40,7 @@ export function SettlementTab() {
   return (
     <div className="space-y-6 pb-24">
       {/* Currency Toggle */}
-      <div className="bg-apple-card/40 dark:bg-apple-card-dark/40 backdrop-blur-md rounded-[2rem] p-2 shadow-sm border border-white/50 dark:border-white/10 flex items-center justify-between">
+      <div className="apple-card p-2 flex items-center justify-between">
         <div className="px-5 py-2 flex items-center gap-2 text-sm font-medium text-gray-500 font-rounded">
           顯示幣別
           {isFetching && currencyDisplay === 'JPY' && <Loader2 size={14} className="animate-spin text-apple-blue" />}
@@ -59,7 +59,7 @@ export function SettlementTab() {
 
       {/* Transaction List */}
       {transactions.length === 0 ? (
-        <div className="text-center py-10 text-gray-500 bg-apple-card/60 dark:bg-apple-card-dark/60 backdrop-blur-2xl rounded-[2rem] p-6 border border-white/50 dark:border-white/10 shadow-soft">
+        <div className="apple-card p-6 text-center py-10 text-gray-500">
           🎉 大家已經互不相欠囉！
         </div>
       ) : (
@@ -70,7 +70,7 @@ export function SettlementTab() {
               : Math.round(t.amountTWD / latestRate);
 
             return (
-              <div key={idx} className="bg-apple-card/60 dark:bg-apple-card-dark/60 backdrop-blur-2xl rounded-[2rem] p-6 shadow-soft dark:shadow-soft-dark border border-white/50 dark:border-white/10 flex items-center justify-between hover:shadow-soft-hover transition-all">
+              <div key={idx} className="apple-card apple-card-hover p-6 flex items-center justify-between">
                 <div className="flex flex-col items-center flex-1">
                   <span className="font-semibold text-lg">{getUserName(t.from)}</span>
                   <span className="text-xs text-apple-blue-heavy font-medium font-rounded">應付</span>

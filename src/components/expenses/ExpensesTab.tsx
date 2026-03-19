@@ -25,7 +25,7 @@ export function ExpensesTab() {
         ) : (
           <div className="space-y-3">
             {expenses.map(exp => (
-              <div key={exp.id} className="bg-apple-card/60 dark:bg-apple-card-dark/60 backdrop-blur-2xl rounded-[2rem] p-5 shadow-soft dark:shadow-soft-dark border border-white/50 dark:border-white/10 flex items-center justify-between hover:shadow-soft-hover transition-all">
+              <div key={exp.id} className="apple-card apple-card-hover p-5 flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <div className="w-12 h-12 rounded-[1.25rem] bg-pastel-mint dark:bg-pastel-mint/10 flex items-center justify-center text-apple-blue-heavy shrink-0 shadow-inner">
                     <ReceiptText size={22} />
@@ -53,7 +53,7 @@ export function ExpensesTab() {
                     onClick={() => {
                       if(confirm('確定要刪除這筆帳目嗎？')) removeExpense(exp.id);
                     }}
-                    className="text-red-500 opacity-80 hover:opacity-100 p-1 active:scale-95 transition-all outline-none"
+                    className="btn-ghost text-red-500"
                   >
                     <Trash2 size={18} />
                   </button>
@@ -67,7 +67,7 @@ export function ExpensesTab() {
       {/* Floating Action Button for Adding Expense */}
       <button
         onClick={() => setIsAddingExpense(true)}
-        className="fixed bottom-24 right-5 md:right-[calc(50%-12rem)] w-[60px] h-[60px] bg-apple-blue-heavy text-white rounded-full flex items-center justify-center shadow-soft-hover hover:scale-105 active:scale-95 transition-all outline-none border-[4px] border-apple-bg dark:border-apple-bg-dark z-50"
+        className="btn-primary fixed bottom-24 right-5 md:right-[calc(50%-12rem)] w-[60px] h-[60px] rounded-full shadow-soft-hover hover:scale-105 border-[4px] border-apple-bg dark:border-apple-bg-dark z-50"
       >
         <Plus size={28} strokeWidth={2.5} />
       </button>

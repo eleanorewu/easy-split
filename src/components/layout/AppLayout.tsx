@@ -29,7 +29,7 @@ export function AppLayout({ children, currentTab, onChangeTab }: AppLayoutProps)
         <header className="sticky top-0 z-20 bg-apple-bg/70 dark:bg-apple-bg-dark/70 backdrop-blur-2xl border-b border-apple-border/50 dark:border-apple-border-dark/50 px-4 h-[60px] flex items-center justify-between">
           <button 
             onClick={() => setActiveLedger(null)}
-            className="flex items-center w-[100px] text-apple-blue font-medium active:opacity-70 transition-opacity -ml-2 p-2 outline-none"
+            className="btn-base flex items-center w-[100px] text-apple-blue font-medium active:opacity-70 -ml-2 p-2 justify-start"
           >
             <ChevronLeft size={24} />
             <span className="text-[17px] -ml-1 font-display">所有帳本</span>
@@ -39,7 +39,7 @@ export function AppLayout({ children, currentTab, onChangeTab }: AppLayoutProps)
             {ledger && (
               <button
                 onClick={() => setIsEditingAvatar(true)}
-                className="w-8 h-8 rounded-xl bg-apple-card/60 dark:bg-apple-card-dark/60 border border-white/30 dark:border-white/10 flex items-center justify-center text-apple-blue-heavy shadow-inner outline-none"
+                className="btn-base w-8 h-8 rounded-xl bg-apple-card/60 dark:bg-apple-card-dark/60 border border-white/30 dark:border-white/10 flex items-center justify-center text-apple-blue-heavy shadow-inner"
                 aria-label="編輯帳本頭像"
                 title="編輯頭像"
               >

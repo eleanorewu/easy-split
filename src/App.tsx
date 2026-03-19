@@ -37,7 +37,7 @@ function App() {
       currentTab={currentTab} 
       onChangeTab={setCurrentTab}
     >
-      <h1 className="text-4xl font-display font-bold mb-6 tracking-tight text-apple-text dark:text-apple-text-dark">
+      <h1 className="mb-6 text-apple-text dark:text-apple-text-dark">
         {currentTab === 'dashboard' && '總覽'}
         {currentTab === 'expenses' && '明細'}
         {currentTab === 'members' && '成員管理'}

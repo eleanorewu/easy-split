@@ -64,12 +64,12 @@ export function AvatarPickerModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 dark:bg-black/60 backdrop-blur-md p-0 sm:p-5">
-      <div className="w-full max-w-md bg-apple-bg/90 dark:bg-apple-bg-dark/90 backdrop-blur-3xl rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-soft-dark border border-white/20 overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-md bg-apple-bg/90 dark:bg-apple-bg-dark/90 backdrop-blur-3xl rounded-t-apple-3xl sm:rounded-apple-3xl shadow-soft-dark border border-white/20 overflow-hidden flex flex-col max-h-[90vh]">
         <div className="flex justify-between items-center p-6 border-b border-apple-border/50 dark:border-apple-border-dark/50 bg-transparent z-10 sticky top-0">
-          <h2 className="text-2xl font-display font-bold tracking-tight">{title}</h2>
+          <h2 className="text-2xl tracking-tight">{title}</h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-full bg-apple-bg dark:bg-black/50 hover:bg-gray-200 dark:hover:bg-gray-800 transition-colors"
+            className="btn-ghost rounded-full bg-apple-bg dark:bg-black/50 hover:bg-gray-200 dark:hover:bg-gray-800"
             aria-label="關閉"
           >
             <X size={20} className="text-gray-500" />
@@ -77,15 +77,13 @@ export function AvatarPickerModal({
         </div>
 
         <div className="p-5 overflow-y-auto space-y-5">
-          <div className="grid grid-cols-3 gap-2 bg-apple-card/40 dark:bg-apple-card-dark/40 rounded-[1.5rem] p-2 border border-white/30 dark:border-white/10">
+          <div className="grid grid-cols-3 gap-2 bg-apple-card/40 dark:bg-apple-card-dark/40 rounded-apple-xl p-2 border border-white/30 dark:border-white/10">
             <button
               onClick={() => {
                 setMode('image');
                 setError('');
               }}
-              className={`flex items-center justify-center gap-2 py-3 rounded-[1.25rem] text-sm font-semibold transition-all outline-none ${
-                mode === 'image' ? 'bg-white/70 dark:bg-black/40 text-apple-text dark:text-apple-text-dark' : 'text-gray-500 hover:bg-white/40 dark:hover:bg-black/20'
-              }`}
+              className={mode === 'image' ? 'btn-secondary py-3 rounded-apple-xl bg-white/70 dark:bg-black/40 text-apple-text dark:text-apple-text-dark' : 'btn-secondary py-3 rounded-apple-xl text-gray-500 hover:bg-white/40 dark:hover:bg-black/20'}
             >
               <ImageIcon size={16} /> 圖片
             </button>
@@ -94,9 +92,7 @@ export function AvatarPickerModal({
                 setMode('emoji');
                 setError('');
               }}
-              className={`flex items-center justify-center gap-2 py-3 rounded-[1.25rem] text-sm font-semibold transition-all outline-none ${
-                mode === 'emoji' ? 'bg-white/70 dark:bg-black/40 text-apple-text dark:text-apple-text-dark' : 'text-gray-500 hover:bg-white/40 dark:hover:bg-black/20'
-              }`}
+              className={mode === 'emoji' ? 'btn-secondary py-3 rounded-apple-xl bg-white/70 dark:bg-black/40 text-apple-text dark:text-apple-text-dark' : 'btn-secondary py-3 rounded-apple-xl text-gray-500 hover:bg-white/40 dark:hover:bg-black/20'}
             >
               <Smile size={16} /> Emoji
             </button>
@@ -105,9 +101,7 @@ export function AvatarPickerModal({
                 setMode('icon');
                 setError('');
               }}
-              className={`flex items-center justify-center gap-2 py-3 rounded-[1.25rem] text-sm font-semibold transition-all outline-none ${
-                mode === 'icon' ? 'bg-white/70 dark:bg-black/40 text-apple-text dark:text-apple-text-dark' : 'text-gray-500 hover:bg-white/40 dark:hover:bg-black/20'
-              }`}
+              className={mode === 'icon' ? 'btn-secondary py-3 rounded-apple-xl bg-white/70 dark:bg-black/40 text-apple-text dark:text-apple-text-dark' : 'btn-secondary py-3 rounded-apple-xl text-gray-500 hover:bg-white/40 dark:hover:bg-black/20'}
             >
               <Shapes size={16} /> Icon
             </button>
@@ -165,7 +159,7 @@ export function AvatarPickerModal({
                   setError('');
                 }}
                 placeholder="😎"
-                className="w-full bg-apple-card/60 dark:bg-apple-card-dark/60 border border-white/50 dark:border-white/10 rounded-[1.5rem] px-5 py-4 outline-none focus:ring-2 focus:ring-apple-blue-heavy transition-all text-lg"
+                className="apple-input w-full text-lg"
               />
               <div className="text-sm text-gray-500">
                 目前：<span className="text-lg">{firstGrapheme(emojiInput) || '（空）'}</span>
@@ -188,7 +182,7 @@ export function AvatarPickerModal({
                         setSelectedIcon(key);
                         setError('');
                       }}
-                      className={`h-14 rounded-[1.25rem] border transition-all outline-none flex items-center justify-center ${
+                      className={`h-14 rounded-apple-xl border transition-all outline-none flex items-center justify-center ${
                         active
                           ? 'bg-white/70 dark:bg-black/40 border-apple-blue-heavy/50 text-apple-blue-heavy'
                           : 'bg-apple-card/40 dark:bg-apple-card-dark/40 border-white/30 dark:border-white/10 text-gray-500 hover:bg-white/40 dark:hover:bg-black/20'
@@ -210,7 +204,7 @@ export function AvatarPickerModal({
         <div className="p-6 border-t border-apple-border/50 dark:border-apple-border-dark/50 bg-transparent z-10 flex gap-3">
           <button
             onClick={() => onSave(undefined)}
-            className="flex-1 bg-apple-card/60 dark:bg-apple-card-dark/60 text-gray-500 font-rounded font-bold py-4 rounded-[1.5rem] hover:opacity-90 active:scale-95 transition-all border border-white/30 dark:border-white/10"
+            className="btn-secondary flex-1 py-4 rounded-apple-xl"
           >
             清除頭像
           </button>
@@ -226,7 +220,7 @@ export function AvatarPickerModal({
               }
               onSave(activeAvatar);
             }}
-            className="flex-1 bg-apple-blue-heavy text-white font-rounded font-bold py-4 rounded-[1.5rem] hover:bg-apple-blue active:scale-95 transition-all shadow-soft-hover disabled:opacity-60 disabled:active:scale-100 flex items-center justify-center gap-2"
+            className="btn-primary flex-1 py-4 rounded-apple-xl shadow-soft-hover"
             disabled={isBusy}
           >
             <Check size={18} /> 儲存

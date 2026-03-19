@@ -63,10 +63,10 @@ export function AddExpenseModal({ onClose }: AddExpenseModalProps) {
   if (users.length === 0) {
     return (
       <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-md flex items-center justify-center p-4">
-        <div className="bg-apple-card/90 dark:bg-apple-card-dark/90 backdrop-blur-2xl rounded-[2.5rem] p-8 w-full max-w-sm text-center shadow-soft-dark border border-white/20">
+        <div className="bg-apple-card/90 dark:bg-apple-card-dark/90 backdrop-blur-2xl rounded-apple-3xl p-8 w-full max-w-sm text-center shadow-soft-dark border border-white/20">
           <h3 className="text-2xl font-display font-bold mb-3">無法新增帳目</h3>
           <p className="text-gray-500 mb-6 font-rounded">請先到「成員」頁籤新增參與分帳的人員喔！</p>
-          <button onClick={onClose} className="w-full bg-apple-blue-heavy text-white py-4 rounded-[1.5rem] font-rounded font-bold shadow-soft-hover transition-all active:scale-95">我知道了</button>
+          <button onClick={onClose} className="btn-primary w-full py-4 rounded-apple-xl shadow-soft-hover">我知道了</button>
         </div>
       </div>
     );
@@ -74,12 +74,12 @@ export function AddExpenseModal({ onClose }: AddExpenseModalProps) {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/40 dark:bg-black/60 backdrop-blur-md flex items-end justify-center sm:items-center p-0 sm:p-4 animate-in fade-in duration-200">
-      <div className="bg-apple-bg/90 dark:bg-apple-bg-dark/90 backdrop-blur-3xl w-full max-w-md rounded-t-[2.5rem] sm:rounded-[2.5rem] shadow-soft-dark border border-white/20 max-h-[90vh] overflow-y-auto pb-safe relative">
+      <div className="bg-apple-bg/90 dark:bg-apple-bg-dark/90 backdrop-blur-3xl w-full max-w-md rounded-t-apple-3xl sm:rounded-apple-3xl shadow-soft-dark border border-white/20 max-h-[90vh] overflow-y-auto pb-safe relative">
         
         {/* Header */}
         <div className="sticky top-0 bg-transparent px-6 py-5 border-b border-apple-border/50 dark:border-apple-border-dark/50 flex justify-between items-center z-10">
-          <h2 className="text-2xl font-display font-bold">新增帳目</h2>
-          <button onClick={onClose} className="bg-gray-100 dark:bg-gray-800 p-2 rounded-full text-gray-500 hover:text-black dark:hover:text-white transition-colors">
+          <h2 className="text-2xl">新增帳目</h2>
+          <button onClick={onClose} className="btn-ghost bg-gray-100 dark:bg-gray-800 rounded-full text-gray-500 hover:text-black dark:hover:text-white">
             <X size={20} />
           </button>
         </div>
@@ -94,14 +94,14 @@ export function AddExpenseModal({ onClose }: AddExpenseModalProps) {
                 value={title}
                 onChange={e => setTitle(e.target.value)}
                 placeholder="例如：晚餐、交通費"
-                className="w-full bg-apple-card/60 dark:bg-apple-card-dark/60 border border-white/50 dark:border-white/10 rounded-[1.5rem] px-5 py-4 outline-none focus:ring-2 focus:ring-apple-blue-heavy transition-all"
+                className="apple-input w-full"
               />
             </div>
             
             <div className="flex gap-3">
               <div className="w-1/3">
                 <label className="block text-sm font-medium text-gray-500 mb-1">幣別</label>
-                <div className="flex bg-apple-card/60 dark:bg-apple-card-dark/60 rounded-[1.5rem] p-1.5 border border-white/50 dark:border-white/10">
+                <div className="flex bg-apple-card/60 dark:bg-apple-card-dark/60 rounded-apple-xl p-1.5 border border-white/50 dark:border-white/10">
                   <button
                     onClick={() => setCurrency('TWD')}
                     className={`flex-1 py-2.5 text-sm font-medium rounded-xl transition-colors ${currency === 'TWD' ? 'bg-white dark:bg-gray-800 shadow-sm' : 'text-gray-500'}`}
@@ -120,7 +120,7 @@ export function AddExpenseModal({ onClose }: AddExpenseModalProps) {
                   onChange={e => setAmount(e.target.value)}
                   placeholder="0"
                   min="0"
-                  className="w-full bg-apple-card/60 dark:bg-apple-card-dark/60 border border-white/50 dark:border-white/10 rounded-[1.5rem] px-5 py-4 outline-none focus:ring-2 focus:ring-apple-blue-heavy transition-all font-mono text-lg"
+                  className="apple-input w-full font-mono text-lg"
                 />
               </div>
             </div>
@@ -153,7 +153,7 @@ export function AddExpenseModal({ onClose }: AddExpenseModalProps) {
                 <button
                   key={u.id}
                   onClick={() => setPaidBy(u.id)}
-                  className={`px-5 py-2.5 rounded-[1.5rem] font-medium transition-all border ${paidBy === u.id ? 'bg-[#7FB8A1] text-white border-transparent shadow-sm font-bold' : 'bg-apple-card/40 dark:bg-apple-card-dark/40 border-white/50 dark:border-white/10 text-gray-600 dark:text-gray-300'}`}
+                  className={paidBy === u.id ? 'btn-primary px-5 py-2.5 rounded-apple-xl shadow-sm' : 'btn-secondary px-5 py-2.5 rounded-apple-xl text-gray-600 dark:text-gray-300'}
                 >
                   {u.name}
                 </button>
@@ -169,7 +169,7 @@ export function AddExpenseModal({ onClose }: AddExpenseModalProps) {
               <label className="block text-sm font-medium text-gray-500">分攤給誰？（皆平分）</label>
               <button 
                 onClick={() => setSplitAmong(new Set(splitAmong.size === users.length ? [] : users.map(u=>u.id)))}
-                className="text-apple-blue text-sm font-medium"
+                className="btn-ghost text-apple-blue text-sm font-medium"
               >
                 {splitAmong.size === users.length ? '全不選' : '全選'}
               </button>
@@ -179,7 +179,7 @@ export function AddExpenseModal({ onClose }: AddExpenseModalProps) {
                 <button
                   key={u.id}
                   onClick={() => toggleSplitUser(u.id)}
-                  className={`px-5 py-2.5 rounded-[1.5rem] font-medium transition-all border ${splitAmong.has(u.id) ? 'bg-apple-blue-heavy text-white border-transparent shadow-sm font-bold' : 'bg-apple-card/40 dark:bg-apple-card-dark/40 border-white/50 dark:border-white/10 text-gray-600 dark:text-gray-300'}`}
+                  className={splitAmong.has(u.id) ? 'btn-primary px-5 py-2.5 rounded-apple-xl shadow-sm' : 'btn-secondary px-5 py-2.5 rounded-apple-xl text-gray-600 dark:text-gray-300'}
                 >
                   {u.name}
                 </button>
@@ -194,7 +194,7 @@ export function AddExpenseModal({ onClose }: AddExpenseModalProps) {
           <button
             onClick={handleSave}
             disabled={!title || !amount || Number(amount) <= 0 || splitAmong.size === 0}
-            className="w-full bg-apple-blue-heavy text-white py-4 rounded-[1.5rem] font-rounded font-bold text-lg disabled:opacity-50 active:scale-95 transition-all shadow-soft-hover"
+            className="btn-primary w-full py-4 rounded-apple-xl shadow-soft-hover text-lg"
           >
             確定儲存
           </button>

@@ -27,7 +27,7 @@ export function BottomNav({ currentTab, onChangeTab }: BottomNavProps) {
         onClick={() => onChangeTab(tab.id as TabType)}
         className={twMerge(
           clsx(
-            "flex flex-col items-center justify-center w-1/4 h-full space-y-1 transition-all outline-none",
+            "btn-base flex flex-col items-center justify-center w-1/4 h-full space-y-1",
             isActive ? "text-apple-blue-heavy scale-105" : "text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
           )
         )}
@@ -40,7 +40,7 @@ export function BottomNav({ currentTab, onChangeTab }: BottomNavProps) {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 max-w-md mx-auto pointer-events-none" style={{ paddingBottom: 'calc(env(safe-area-inset-bottom) + 1rem)' }}>
-      <div className="mx-4 bg-apple-card/70 dark:bg-apple-card-dark/70 backdrop-blur-2xl border border-white/50 dark:border-white/10 rounded-[2rem] shadow-soft dark:shadow-soft-dark pointer-events-auto transition-all">
+      <div className="mx-4 bg-apple-card/70 dark:bg-apple-card-dark/70 backdrop-blur-2xl border border-white/50 dark:border-white/10 rounded-apple-2xl shadow-soft dark:shadow-soft-dark pointer-events-auto transition-all">
         <div className="flex justify-between items-center h-[68px] px-2 relative">
           {tabs.map(renderTab)}
         </div>
