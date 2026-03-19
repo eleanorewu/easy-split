@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@custom-variant dark (&:where(.dark, .dark *));
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100..800&family=Noto+Sans+TC:wght@100..900&family=Outfit:wght@100..900&family=Zen+Maru+Gothic:wght@300;400;500;700;900&display=swap');
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
   /* Colors */
