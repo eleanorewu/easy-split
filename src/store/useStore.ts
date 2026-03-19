@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { User, Expense, Ledger } from '../types';
+import type { User, Expense, Ledger, Avatar } from '../types';
 
 interface AppState {
   theme: 'light' | 'dark';
@@ -11,12 +11,14 @@ interface AppState {
   
   // Actions
   toggleTheme: () => void;
-  addLedger: (name: string, memberNames?: string[]) => void;
+  addLedger: (name: string, members?: { name: string; avatar?: Avatar }[], avatar?: Avatar) => void;
   setActiveLedger: (id: string | null) => void;
   removeLedger: (id: string) => void;
+  updateLedgerAvatar: (ledgerId: string, avatar?: Avatar) => void;
   
-  addUser: (name: string) => void;
+  addUser: (name: string, avatar?: Avatar) => void;
   removeUser: (id: string, cascadeRemoveExpenses?: boolean) => void;
+  updateUserAvatar: (userId: string, avatar?: Avatar) => void;
   
   addExpense: (expense: Omit<Expense, 'id' | 'date' | 'ledgerId'>) => void;
   removeExpense: (id: string) => void;
@@ -33,13 +35,13 @@ export const useStore = create<AppState>()(
       
       toggleTheme: () => set((state) => ({ theme: state.theme === 'light' ? 'dark' : 'light' })),
       
-      addLedger: (name, memberNames) => set((state) => {
+      addLedger: (name, members, avatar) => set((state) => {
         const newLedgerId = crypto.randomUUID();
-        const newLedger = { id: newLedgerId, name, createdAt: Date.now() };
+        const newLedger: Ledger = { id: newLedgerId, name, createdAt: Date.now(), avatar };
         
         let newUsers = state.users;
-        if (memberNames && memberNames.length > 0) {
-          const usersToAdd = memberNames.map(mName => ({ id: crypto.randomUUID(), ledgerId: newLedgerId, name: mName }));
+        if (members && members.length > 0) {
+          const usersToAdd: User[] = members.map(m => ({ id: crypto.randomUUID(), ledgerId: newLedgerId, name: m.name, avatar: m.avatar }));
           newUsers = [...state.users, ...usersToAdd];
         }
 
@@ -58,11 +60,15 @@ export const useStore = create<AppState>()(
         users: state.users.filter(u => u.ledgerId !== id),
         expenses: state.expenses.filter(e => e.ledgerId !== id),
       })),
+
+      updateLedgerAvatar: (ledgerId: string, avatar?: Avatar) => set((state) => ({
+        ledgers: state.ledgers.map(l => (l.id === ledgerId ? { ...l, avatar } : l))
+      })),
       
-      addUser: (name: string) => set((state) => {
+      addUser: (name: string, avatar?: Avatar) => set((state) => {
         if (!state.activeLedgerId) return state;
         return {
-          users: [...state.users, { id: crypto.randomUUID(), ledgerId: state.activeLedgerId, name }]
+          users: [...state.users, { id: crypto.randomUUID(), ledgerId: state.activeLedgerId, name, avatar }]
         };
       }),
       
@@ -78,6 +84,10 @@ export const useStore = create<AppState>()(
           expenses: newExpenses,
         };
       }),
+
+      updateUserAvatar: (userId: string, avatar?: Avatar) => set((state) => ({
+        users: state.users.map(u => (u.id === userId ? { ...u, avatar } : u))
+      })),
       
       addExpense: (exp) => set((state) => {
         if (!state.activeLedgerId) return state;
@@ -92,15 +102,18 @@ export const useStore = create<AppState>()(
     }),
     {
       name: 'easy-split-storage',
-      version: 1, // Bumped version to introduce Ledgers
+      version: 2, // Avatar support
       /* eslint-disable @typescript-eslint/no-explicit-any */
       migrate: (persistedState: any, version: number) => {
-        if (version === 0) {
+        const v = version ?? 0;
+        let nextState = persistedState;
+
+        if (v === 0) {
           const hasData = (persistedState.users && persistedState.users.length > 0) || (persistedState.expenses && persistedState.expenses.length > 0);
           
           if (hasData) {
             const defaultLedgerId = crypto.randomUUID();
-            return {
+            nextState = {
               ...persistedState,
               ledgers: [{ id: defaultLedgerId, name: '第一趟旅程', createdAt: Date.now() }],
               activeLedgerId: defaultLedgerId,
@@ -108,14 +121,23 @@ export const useStore = create<AppState>()(
               expenses: (persistedState.expenses || []).map((e: any) => ({ ...e, ledgerId: defaultLedgerId })),
             };
           } else {
-             return {
+            nextState = {
               ...persistedState,
               ledgers: [],
               activeLedgerId: null
-             };
+            };
           }
         }
-        return persistedState;
+
+        if (v <= 1) {
+          nextState = {
+            ...nextState,
+            ledgers: (nextState.ledgers || []).map((l: any) => ({ ...l, avatar: l.avatar })),
+            users: (nextState.users || []).map((u: any) => ({ ...u, avatar: u.avatar })),
+          };
+        }
+
+        return nextState;
       }
     }
   )

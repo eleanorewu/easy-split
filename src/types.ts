@@ -1,15 +1,22 @@
 export type Currency = 'TWD' | 'JPY';
 
+export type Avatar =
+  | { kind: 'emoji'; emoji: string }
+  | { kind: 'icon'; icon: string }
+  | { kind: 'image'; dataUrl: string };
+
 export interface Ledger {
   id: string;
   name: string;
   createdAt: number;
+  avatar?: Avatar;
 }
 
 export interface User {
   id: string;
   ledgerId: string;
   name: string;
+  avatar?: Avatar;
 }
 
 export interface Expense {

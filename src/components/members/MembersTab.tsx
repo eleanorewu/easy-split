@@ -1,6 +1,9 @@
 import { useState } from 'react';
-import { Plus, Trash2, User as UserIcon } from 'lucide-react';
+import { Plus, Trash2, Pencil } from 'lucide-react';
 import { useStore } from '../../store/useStore';
+import { Avatar } from '../ui/Avatar';
+import { AvatarPickerModal } from '../ui/AvatarPickerModal';
+import type { Avatar as AvatarType } from '../../types';
 
 export function MembersTab() {
   const activeLedgerId = useStore(state => state.activeLedgerId);
@@ -8,8 +11,12 @@ export function MembersTab() {
   const users = allUsers.filter(u => u.ledgerId === activeLedgerId);
   const addUser = useStore(state => state.addUser);
   const removeUser = useStore(state => state.removeUser);
+  const updateUserAvatar = useStore(state => state.updateUserAvatar);
   const [newName, setNewName] = useState('');
   const [errorName, setErrorName] = useState('');
+  const [editingUserId, setEditingUserId] = useState<string | null>(null);
+  const [newUserAvatar, setNewUserAvatar] = useState<AvatarType | undefined>(undefined);
+  const [isPickingNewUserAvatar, setIsPickingNewUserAvatar] = useState(false);
 
   const handleAdd = () => {
     const trimmed = newName.trim();
@@ -26,10 +33,13 @@ export function MembersTab() {
       return;
     }
 
-    addUser(trimmed);
+    addUser(trimmed, newUserAvatar);
     setNewName('');
     setErrorName('');
+    setNewUserAvatar(undefined);
   };
+
+  const editingUser = editingUserId ? users.find(u => u.id === editingUserId) : undefined;
 
   return (
     <div className="space-y-6">
@@ -37,6 +47,21 @@ export function MembersTab() {
       {/* Add Member Card */}
       <div className="bg-apple-card/40 dark:bg-apple-card-dark/40 backdrop-blur-md rounded-[2rem] p-6 shadow-sm border border-white/50 dark:border-white/10 flex flex-col gap-3">
         <div className="flex gap-3 items-center">
+            <button
+              onClick={() => setIsPickingNewUserAvatar(true)}
+              className="w-14 h-14 rounded-[1.5rem] bg-apple-bg dark:bg-black/50 border border-apple-border/50 dark:border-apple-border-dark flex items-center justify-center text-apple-blue-heavy shadow-inner relative outline-none flex-shrink-0"
+              aria-label="設定成員頭像（選填）"
+              title="設定頭像（選填）"
+            >
+              <Avatar
+                avatar={newUserAvatar}
+                fallback="user"
+                className="w-14 h-14 rounded-[1.5rem] flex items-center justify-center"
+              />
+              <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white/80 dark:bg-black/50 border border-white/60 dark:border-white/10 flex items-center justify-center text-gray-600 dark:text-gray-300">
+                <Pencil size={12} />
+              </span>
+            </button>
             <input
               type="text"
               value={newName}
@@ -68,9 +93,21 @@ export function MembersTab() {
           users.map(user => (
             <div key={user.id} className="bg-apple-card/60 dark:bg-apple-card-dark/60 backdrop-blur-2xl rounded-[2rem] p-5 shadow-soft dark:shadow-soft-dark border border-white/50 dark:border-white/10 flex items-center justify-between group hover:shadow-soft-hover transition-all">
               <div className="flex items-center gap-4">
-                <div className="w-12 h-12 rounded-[1.25rem] bg-pastel-lavender dark:bg-pastel-lavender/10 flex items-center justify-center text-apple-blue-heavy shadow-inner">
-                  <UserIcon size={22} />
-                </div>
+                <button
+                  onClick={() => setEditingUserId(user.id)}
+                  className="w-12 h-12 rounded-[1.25rem] bg-pastel-lavender dark:bg-pastel-lavender/10 flex items-center justify-center text-apple-blue-heavy shadow-inner relative outline-none"
+                  aria-label="編輯成員頭像"
+                  title="編輯頭像"
+                >
+                  <Avatar
+                    avatar={user.avatar}
+                    fallback="user"
+                    className="w-12 h-12 rounded-[1.25rem] flex items-center justify-center"
+                  />
+                  <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white/80 dark:bg-black/50 border border-white/60 dark:border-white/10 flex items-center justify-center text-gray-600 dark:text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Pencil size={12} />
+                  </span>
+                </button>
                 <span className="font-semibold text-lg">{user.name}</span>
               </div>
               <button
@@ -87,6 +124,30 @@ export function MembersTab() {
           ))
         )}
       </div>
+
+      {editingUser && (
+        <AvatarPickerModal
+          title={`編輯「${editingUser.name}」頭像`}
+          initialAvatar={editingUser.avatar}
+          onClose={() => setEditingUserId(null)}
+          onSave={(avatar) => {
+            updateUserAvatar(editingUser.id, avatar);
+            setEditingUserId(null);
+          }}
+        />
+      )}
+
+      {isPickingNewUserAvatar && (
+        <AvatarPickerModal
+          title="設定成員頭像（選填）"
+          initialAvatar={newUserAvatar}
+          onClose={() => setIsPickingNewUserAvatar(false)}
+          onSave={(avatar) => {
+            setNewUserAvatar(avatar);
+            setIsPickingNewUserAvatar(false);
+          }}
+        />
+      )}
 
     </div>
   );

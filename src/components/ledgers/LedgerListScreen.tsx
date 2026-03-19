@@ -1,18 +1,22 @@
 import { useState } from 'react';
-import { BookText, Trash2, UserPlus, Calculator, Plus } from 'lucide-react';
+import { BookText, Trash2, UserPlus, Calculator, Plus, Pencil } from 'lucide-react';
 import { useStore } from '../../store/useStore';
 import { CreateLedgerModal } from './CreateLedgerModal';
 import { ThemeToggle } from '../ui/ThemeToggle';
 import type { TabType } from '../layout/BottomNav';
+import { Avatar } from '../ui/Avatar';
+import { AvatarPickerModal } from '../ui/AvatarPickerModal';
 
 export function LedgerListScreen({ onEnterLedger }: { onEnterLedger?: (tab: TabType) => void }) {
   const ledgers = useStore(state => state.ledgers);
   const removeLedger = useStore(state => state.removeLedger);
   const setActiveLedger = useStore(state => state.setActiveLedger);
+  const updateLedgerAvatar = useStore(state => state.updateLedgerAvatar);
   const users = useStore(state => state.users);
   const expenses = useStore(state => state.expenses);
 
   const [isAdding, setIsAdding] = useState(false);
+  const [editingLedgerId, setEditingLedgerId] = useState<string | null>(null);
 
   const getLedgerStats = (id: string) => {
     const lUsers = users.filter(u => u.ledgerId === id);
@@ -20,6 +24,8 @@ export function LedgerListScreen({ onEnterLedger }: { onEnterLedger?: (tab: TabT
     const totalTwd = lExpenses.reduce((sum, e) => sum + (e.currency === 'TWD' ? e.amount : e.amount * e.exchangeRate), 0);
     return { userCount: lUsers.length, expenseCount: lExpenses.length, total: Math.round(totalTwd) };
   };
+
+  const editingLedger = editingLedgerId ? ledgers.find(l => l.id === editingLedgerId) : undefined;
 
   return (
     <div className="min-h-screen bg-apple-bg dark:bg-apple-bg-dark text-apple-text dark:text-apple-text-dark font-sans relative transition-colors duration-500">
@@ -52,9 +58,24 @@ export function LedgerListScreen({ onEnterLedger }: { onEnterLedger?: (tab: TabT
                 >
                   <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-14 h-14 bg-pastel-mint dark:bg-pastel-mint/10 rounded-[1.25rem] flex items-center justify-center text-apple-blue-heavy shadow-inner">
-                        <BookText size={24} />
-                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setEditingLedgerId(ledger.id);
+                        }}
+                        className="w-14 h-14 bg-pastel-mint dark:bg-pastel-mint/10 rounded-[1.25rem] flex items-center justify-center text-apple-blue-heavy shadow-inner relative outline-none"
+                        aria-label="編輯帳本頭像"
+                        title="編輯頭像"
+                      >
+                        <Avatar
+                          avatar={ledger.avatar}
+                          fallback="book"
+                          className="w-14 h-14 rounded-[1.25rem] flex items-center justify-center"
+                        />
+                        <span className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-white/80 dark:bg-black/50 border border-white/60 dark:border-white/10 flex items-center justify-center text-gray-600 dark:text-gray-300 opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Pencil size={12} />
+                        </span>
+                      </button>
                       <div>
                         <h2 className="text-xl font-bold">{ledger.name}</h2>
                         <p className="text-xs text-gray-500 mt-0.5">建立於 {dateStr}</p>
@@ -123,6 +144,17 @@ export function LedgerListScreen({ onEnterLedger }: { onEnterLedger?: (tab: TabT
         </div>
       </div>
       {isAdding && <CreateLedgerModal onClose={() => setIsAdding(false)} />}
+      {editingLedger && (
+        <AvatarPickerModal
+          title={`編輯「${editingLedger.name}」頭像`}
+          initialAvatar={editingLedger.avatar}
+          onClose={() => setEditingLedgerId(null)}
+          onSave={(avatar) => {
+            updateLedgerAvatar(editingLedger.id, avatar);
+            setEditingLedgerId(null);
+          }}
+        />
+      )}
     </div>
   );
 }
