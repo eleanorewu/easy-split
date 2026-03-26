@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import { useStore } from '../../store/useStore';
+import { Plus } from 'lucide-react';
+import { AddExpenseModal } from '../expenses/AddExpenseModal';
 
 export function DashboardTab() {
   const activeLedgerId = useStore(state => state.activeLedgerId);
@@ -9,8 +12,11 @@ export function DashboardTab() {
 
   const totalTwd = expenses.map(e => e.currency === 'TWD' ? e.amount : e.amount * e.exchangeRate).reduce((a, b) => a + b, 0);
 
+  const [isAddingExpense, setIsAddingExpense] = useState(false);
+
   return (
-    <div className="space-y-6">
+    <>
+      <div className="space-y-6 pb-24">
       <div className="apple-card p-8 text-center flex flex-col items-center justify-center min-h-[160px]">
         <h2 className="text-gray-500 dark:text-gray-400 text-sm font-medium mb-3 tracking-widest">總花費 (折合台幣)</h2>
         <div className="text-5xl font-mono font-bold tracking-tight text-apple-text dark:text-apple-text-dark">
@@ -30,5 +36,15 @@ export function DashboardTab() {
         </div>
       </div>
     </div>
+
+    <button
+      onClick={() => setIsAddingExpense(true)}
+      className="btn-primary fixed bottom-24 right-5 md:right-[calc(50%-12rem)] w-[60px] h-[60px] rounded-full shadow-soft-hover hover:scale-105 border-[4px] border-apple-bg dark:border-apple-bg-dark z-50 flex items-center justify-center"
+    >
+      <Plus size={28} strokeWidth={2.5} />
+    </button>
+
+    {isAddingExpense && <AddExpenseModal onClose={() => setIsAddingExpense(false)} />}
+    </>
   );
 }
