@@ -7,11 +7,37 @@ import { ExpensesTab } from './components/expenses/ExpensesTab';
 import { SettlementTab } from './components/settlement/SettlementTab';
 import { LedgerListScreen } from './components/ledgers/LedgerListScreen';
 import { useStore } from './store/useStore';
+import { supabase } from './utils/supabase';
+import { useSync } from './hooks/useSync';
 
 function App() {
   const activeLedgerId = useStore(state => state.activeLedgerId);
   const theme = useStore(state => state.theme);
+  const session = useStore(state => state.session);
+  const setSession = useStore(state => state.setSession);
   const [currentTab, setCurrentTab] = useState<TabType>('dashboard');
+  const { fetchCloudLedgers } = useSync();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [setSession]);
+
+  useEffect(() => {
+    if (session?.user) {
+      fetchCloudLedgers();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [session?.user?.id]);
 
   useEffect(() => {
     if (theme === 'dark') {

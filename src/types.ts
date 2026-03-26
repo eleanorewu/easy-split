@@ -10,6 +10,7 @@ export interface Ledger {
   name: string;
   createdAt: number;
   avatar?: Avatar;
+  isCloud?: boolean;
 }
 
 export interface User {

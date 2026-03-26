@@ -1,15 +1,18 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import type { User, Expense, Ledger, Avatar } from '../types';
+import type { Session } from '@supabase/supabase-js';
 
 interface AppState {
   theme: 'light' | 'dark';
+  session: Session | null;
   ledgers: Ledger[];
   activeLedgerId: string | null;
   users: User[];
   expenses: Expense[];
   
   // Actions
+  setSession: (session: Session | null) => void;
   toggleTheme: () => void;
   addLedger: (name: string, members?: { name: string; avatar?: Avatar }[], avatar?: Avatar) => void;
   setActiveLedger: (id: string | null) => void;
@@ -22,16 +25,23 @@ interface AppState {
   
   addExpense: (expense: Omit<Expense, 'id' | 'date' | 'ledgerId'>) => void;
   removeExpense: (id: string) => void;
+  
+  // Cloud Sync
+  markLedgerAsCloud: (ledgerId: string) => void;
+  mergeCloudData: (cloudLedgers: Ledger[], cloudUsers: User[], cloudExpenses: Expense[]) => void;
 }
 
 export const useStore = create<AppState>()(
   persist(
     (set) => ({
       theme: 'light',
+      session: null,
       ledgers: [],
       activeLedgerId: null,
       users: [],
       expenses: [],
+      
+      setSession: (session) => set({ session }),
       
       toggleTheme: () => set((state) => ({ theme: state.theme === 'light' ? 'dark' : 'light' })),
       
@@ -99,6 +109,25 @@ export const useStore = create<AppState>()(
       removeExpense: (id) => set((state) => ({
         expenses: state.expenses.filter(e => e.id !== id)
       })),
+
+      markLedgerAsCloud: (ledgerId) => set((state) => ({
+        ledgers: state.ledgers.map(l => l.id === ledgerId ? { ...l, isCloud: true } : l)
+      })),
+
+      mergeCloudData: (cloudLedgers, cloudUsers, cloudExpenses) => set((state) => {
+        const cloudLedgerIds = new Set(cloudLedgers.map(l => l.id));
+        
+        // 保留原本就只存在單機的資料
+        const localOnlyLedgers = state.ledgers.filter(l => !cloudLedgerIds.has(l.id));
+        const localOnlyUsers = state.users.filter(u => !cloudLedgerIds.has(u.ledgerId));
+        const localOnlyExpenses = state.expenses.filter(e => !cloudLedgerIds.has(e.ledgerId));
+        
+        return {
+          ledgers: [...localOnlyLedgers, ...cloudLedgers],
+          users: [...localOnlyUsers, ...cloudUsers],
+          expenses: [...localOnlyExpenses, ...cloudExpenses],
+        };
+      }),
     }),
     {
       name: 'easy-split-storage',
